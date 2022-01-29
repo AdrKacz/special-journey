@@ -14,6 +14,10 @@ config/name="lobby"
 run/main_scene="res://lobby/lobby.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+NetworkManager="*res://global-scripts/network-manager.gd"
+
 [display]
 
 window/size/width=500
