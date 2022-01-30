@@ -10,6 +10,8 @@ var SERVER_PORT : int = 8080
 var MAX_PLAYERS : int = 4
 var peer : NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
 
+var peers : PoolIntArray = PoolIntArray()
+
 func _ready() -> void:
 	get_tree().connect("network_peer_connected", self, "_on_Network_Peer_Connected")
 	get_tree().connect("network_peer_disconnected", self, "_on_Network_Peer_Disconnected")
@@ -33,6 +35,8 @@ func _on_Network_Peer_Connected(id : int) -> void:
 	print("[on_Network_Peer_Connected] ID: " + String(id))
 	if (id == 1):
 		emit_signal("lobby_joined")
+	else:
+		peers.append(id)
 	emit_signal("network_message", "connected::" + String(id))
 	
 func _on_Network_Peer_Disconnected(id : int) -> void:

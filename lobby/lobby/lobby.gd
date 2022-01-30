@@ -27,7 +27,7 @@ func _ready() -> void:
 	NetworkManager.connect("lobby_joined", self, "_on_Lobby_Joined")
 	NetworkManager.connect("lobby_leaved", self, "_on_Lobby_Leaved")
 	NetworkManager.connect("network_message", self, "_on_Network_Message")
-
+	
 func _on_HostButton_pressed() -> void:
 	if host_button.text == "Host lobby":
 		# Hide Join Box
@@ -71,7 +71,11 @@ func _on_JoinButton_pressed() -> void:
 		NetworkManager.leaveCurrentLobby()
 
 func _on_SendChatButton_pressed() -> void:
-	rpc("add_chat_message", chat_input.text)
+#	rpc("add_chat_message", chat_input.text)
+	# Need to replace all rpc with that... not so good
+	for p in NetworkManager.peers:
+		rpc_id(p, "add_chat_message", chat_input.text)
+	add_chat_message(chat_input.text)
 	chat_input.text = ""
 	
 func _on_Lobby_Created(ip_address: String, port: int) -> void:
@@ -105,6 +109,6 @@ func _on_Network_Message(message : String) -> void:
 func add_system_chat_message(message : String) -> void:
 	chat.text += "\n%s" % message
 
-remotesync func add_chat_message(message : String) -> void:
+remote func add_chat_message(message : String) -> void:
 	var local_peer_id : int= get_tree().get_rpc_sender_id()
 	chat.text += "\n[%010d] > %s" % [local_peer_id, message]
