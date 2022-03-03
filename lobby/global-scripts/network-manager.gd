@@ -15,6 +15,15 @@ var peers : PoolIntArray = PoolIntArray()
 func _ready() -> void:
 	get_tree().connect("network_peer_connected", self, "_on_Network_Peer_Connected")
 	get_tree().connect("network_peer_disconnected", self, "_on_Network_Peer_Disconnected")
+	if OS.has_feature("Server"):
+		SERVER_PORT = 8081
+		hostNewLobby()
+		print("Lobby created at 127.0.0.1:8081")
+		
+func _exit_tree():
+	if OS.has_feature("Server"):
+		leaveCurrentLobby()
+		print("Closed connection")
 
 func hostNewLobby() -> void:
 	peer.create_server(SERVER_PORT, MAX_PLAYERS)
@@ -43,4 +52,3 @@ func _on_Network_Peer_Disconnected(id : int) -> void:
 	# Todo: What if server disconnect
 	print("[on_Network_Peer_Disconnected] ID: " + String(id))
 	emit_signal("network_message", "disconnected::" + String(id))
-

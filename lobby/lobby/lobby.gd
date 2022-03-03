@@ -72,7 +72,6 @@ func _on_JoinButton_pressed() -> void:
 
 func _on_SendChatButton_pressed() -> void:
 #	rpc("add_chat_message", chat_input.text)
-	# Need to replace all rpc with that... not so good
 	for p in NetworkManager.peers:
 		rpc_id(p, "add_chat_message", chat_input.text)
 	add_chat_message(chat_input.text)
@@ -110,5 +109,5 @@ func add_system_chat_message(message : String) -> void:
 	chat.text += "\n%s" % message
 
 remote func add_chat_message(message : String) -> void:
-	var local_peer_id : int= get_tree().get_rpc_sender_id()
+	var local_peer_id : int = get_tree().get_rpc_sender_id()
 	chat.text += "\n[%010d] > %s" % [local_peer_id, message]
